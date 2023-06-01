@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const inputDataProcess = require("./components/dataProcess");
@@ -7,15 +6,14 @@ const utils = require("./components/utils");
 
 const TOKEN = process.env.TOKEN;
 
-// Setup AI library
+// инициализация переменных для работы с ИИ
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_KEY,
 });
-
 const openAI = new OpenAIApi(configuration);
 
-// Setup discord library
+// инициализация переменных для роботы с discordjs
 const { Client, EmbedBuilder, GatewayIntentBits, PermissionFlagsBits } = require("discord.js");
 const client = new Client({
   intents: [
@@ -25,39 +23,44 @@ const client = new Client({
   ]
 });
 
-// Print a message about the successful bot start
+// выводит сообщений про успешный запуск бота
 client.on("ready", () => {
   console.log("Bot online")
 });
 
 // ИИ для администрации
-// client.on("messageCreate", async(message) => {
-//   if(!message.member.permissions.has(PermissionFlagsBits.Administrator) && !message.content.startsWith(`<@${client.user.id}>`)) return;
-//   if(message.author.bot) return;
+client.on("messageCreate", async(message) => {
+  if(!message.member.permissions.has(PermissionFlagsBits.Administrator)) return;
+  if(!message.content.startsWith(`<@${client.user.id}>`)) return;
+  if(message.author.bot) return;
   
-//   let conversationLog = [{role: "system", content: "You are a friendly chatbot."}];
+  let conversationLog = [{role: "system", content: "You are a friendly chatbot."}];
   
-//   // заносим сообщение пользователя в массив
-//   conversationLog.push({
-//     role: "user",
-//     content: message.content.slice(22) // обрезаем на 22, чтобы убрался пинг(<@botId>) бота в начале сообщения,
-//   });
-  
-//   // бот печатает отображение
-//   await message.channel.sendTyping();
+  // заносим сообщение пользователя в массив
+  conversationLog.push({
+    role: "user",
+    content: message.content.slice(22) // обрезаем на 22, чтобы убрался пинг(<@botId>) бота в начале сообщения,
+  });
 
-//   // получение ответа от API-запроса 
-//   const response = await openAI.createChatCompletion({
-//     model: "davinci",
-//     messages: conversationLog,
-//   });
+  // бот печатает отображение
+  await message.channel.sendTyping();
+
+  try {
+    // получение ответа от API-запроса 
+    const response = await openAI.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: conversationLog,
+    });
+    
+    // ответ пользователю
+    message.reply(response.data.choices[0].message);
+  } catch(err) {
+    console.log(err);
+  }
   
-//   // ответ пользователю
-//   message.reply(response.data.choices[0].message);
-  
-//   // Надеюсь мои комментарии помогут 
-//   // другому человеку и дальше поддерживать бота
-// })
+  // Надеюсь мои комментарии помогут 
+  // другому человеку и дальше поддерживать бота
+})
 
 // Анализирует и выводит результат обработки сделки
 client.on("messageCreate", async(message) => {
