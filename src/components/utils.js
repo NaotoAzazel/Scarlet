@@ -17,7 +17,7 @@ function getLastModifiedTime(filePath) {
  */
 function getDiscordTimestamp(date) {
   const timestamp = Math.floor(date.getTime() / 1000);
-  return `<t:${timestamp}:F>`;
+  return `<t:${timestamp}:D>`;
 }
 
 module.exports = {getLastModifiedTime, getDiscordTimestamp};
