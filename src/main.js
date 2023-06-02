@@ -25,7 +25,7 @@ const client = new Client({
 
 // выводит сообщений про успешный запуск бота
 client.on("ready", () => {
-  console.log("Bot online")
+  console.log("Bot online");
 });
 
 // ИИ для администрации
@@ -82,14 +82,23 @@ client.on("messageCreate", async(message) => {
     const { tradeResult, lfResult, itemsBeforeSeparator, itemsAfterSeparator } = inputDataProcess(args);
     const { sumBefore, sumAfter, profit, embedColor, tradeStatus } = profitCalculate(itemsBeforeSeparator, itemsAfterSeparator);
     
+    const formattedProfit = Math.abs(profit).toFixed(2);
+    let statusString;
+
+    if (tradeStatus === "выгодная")
+      statusString = `Вы получили ${formattedProfit}% из этой сделки`;
+    else if (tradeStatus === "невыгодная")
+      statusString = `Вы потеряли ${formattedProfit}% из этой сделки`;
+    else
+      statusString = `В этой сделки вы ничего не потеряли и не получили`;
+
     const replyEmbed = new EmbedBuilder()
-      .setAuthor({name: `${tradeStatus} trade | You ${tradeStatus == "FAIR" ? "GET" : tradeStatus} ${Math.abs(profit).toFixed(2)}% from this trade` })
+      .setAuthor({name: `Это ${tradeStatus} сделка | ${statusString}`})
       .addFields(
         {name: `Trading: ${sumBefore}`, value: tradeResult, inline: true},
         {name: `LF: ${sumAfter}`, value: lfResult, inline: true},
-        {name: `Item prices were updated: ${discordTimestamp}`, value: " "}
+        {name: `Цены обновлялись: ${discordTimestamp}`, value: "Values aren't exact, follow this advice at your own risk"}
       )
-      .setFooter({text: "Values aren't exact, follow this advice at your own risk"})
       .setColor(embedColor)
 
     message.reply({embeds: [replyEmbed]});

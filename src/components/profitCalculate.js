@@ -20,7 +20,7 @@ function profitCalculate(itemsBeforeSeparator, itemsAfterSeparator) {
   
   // считаем profit от сделки
   const profit = ((sumAfter - sumBefore) * 100) / sumAfter;
-  profit < 0 ? (tradeStatus = "LOSE", embedColor = "#ED4245") : (tradeStatus = "WIN", embedColor = "#57F287");
+  profit < 0 ? (tradeStatus = "невыгодная", embedColor = "#ED4245") : (tradeStatus = "выгодная", embedColor = "#57F287");
 
   // находим большее и меньшее число
   let biggest = sumBefore > sumAfter ? sumBefore : sumAfter;
@@ -28,7 +28,7 @@ function profitCalculate(itemsBeforeSeparator, itemsAfterSeparator) {
 
   // проверяем если обмен равноценный
   if(biggest - smaller <= 20) // заместо 20 можно написать число, которое будет давать "границу" FAIRY-трейду
-  tradeStatus = "FAIR", embedColor = "Blue";
+    tradeStatus = "равноценная", embedColor = "Blue";
 
   return { sumBefore, sumAfter, profit, embedColor, tradeStatus };
 }
