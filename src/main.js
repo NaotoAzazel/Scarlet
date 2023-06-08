@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 
 const inputDataProcess = require("./components/dataProcess");
 const profitCalculate = require("./components/profitCalculate");
@@ -65,8 +66,8 @@ client.on("messageCreate", async(message) => {
 // Анализирует и выводит результат обработки сделки
 client.on("messageCreate", async(message) => {
   if(message.author.bot || message.channelId !== process.env.TRADE_CHANNEL) return;
-  const tradePromptString = /<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*\s*👉\s*<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*/;
-  
+  const tradePromptString = /<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*\s*👉(?:\p{Emoji_Modifier_Base}\p{Emoji_Modifier}*\s*)*(?:<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*)*/u;
+
   // Проверяет тип сообщения, является ли оно обычным или специальным
   if(!tradePromptString.test(message.content)) 
     return;
@@ -93,7 +94,7 @@ client.on("messageCreate", async(message) => {
       statusString = `В этой сделки вы ничего не потеряли и не получили`;
 
     const replyEmbed = new EmbedBuilder()
-      .setAuthor({name: `Это ${tradeStatus} сделка | ${statusString}`})
+      .setDescription(`**Это ${tradeStatus} сделка** | ${statusString}`)
       .addFields(
         {name: `Trading: ${sumBefore}`, value: tradeResult, inline: true},
         {name: `LF: ${sumAfter}`, value: lfResult, inline: true},
