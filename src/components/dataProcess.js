@@ -27,20 +27,20 @@ function inputDataProcess(args) {
   // записываем предметы до разделителя и после разделителя
   for(l; l < posOfSeparator; l++) {
     itemsBeforeSeparator.push(args[l].match(fruitName)[0]);
-    trading += `<${args[l]}>` + ", ";
+    trading += `<${args[l]}>` + " ";
   };
   l++ // инкрементируем счетчик, чтобы не записался разделитель в массив
   
   for(l; l < numOfArgs; l++) {
     itemsAfterSeparator.push(args[l].match(fruitName)[0]);
-    lf += `<${args[l]}>` + ", ";
+    lf += `<${args[l]}>` + " ";
   }
 
   return {
     itemsBeforeSeparator, 
     itemsAfterSeparator,
-    tradeResult: trading.slice(0, lf.length-2), // обрезаем trading и lf, чтобы убрать ", " в конце строк
-    lfResult: lf.slice(0, lf.length-2),
+    tradeResult: trading,
+    lfResult: lf,
   };
 }  
 

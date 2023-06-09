@@ -1,5 +1,4 @@
 require("dotenv").config();
-const fs = require("fs");
 
 const inputDataProcess = require("./components/dataProcess");
 const profitCalculate = require("./components/profitCalculate");
