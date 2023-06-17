@@ -1,6 +1,9 @@
 const fs = require("fs");
-const rawData = fs.readFileSync("itemPrice.json");
-const items = JSON.parse(rawData);
+const itemPriceFilePath = "itemPrice.json";
+const rawItemData = fs.readFileSync(itemPriceFilePath);
+const items = JSON.parse(rawItemData);
+
+const equalValueBoundary = 20; // заместо 20 можно написать число, которое будет давать "границу" FAIRY-трейду
 
 /** 
   * Считает процент выгодности на основе входных данных  
@@ -9,26 +12,26 @@ const items = JSON.parse(rawData);
   * процент выгодности
 */
 function profitCalculate(itemsBeforeSeparator, itemsAfterSeparator) {
-  let sumBefore = 0, sumAfter = 0, tradeStatus = "";
+  let sumBefore = 0, sumAfter = 0, tradeStatus = 0;
 
-  // считаем суму предметов до и после разделителя
-  for(let i = 0; i < itemsBeforeSeparator.length; i++) 
-    sumBefore += items[itemsBeforeSeparator[i]];
+  for (let i = 0; i < itemsBeforeSeparator.length || i < itemsAfterSeparator.length; i++) {
+    if (i < itemsBeforeSeparator.length) {
+      sumBefore += items[itemsBeforeSeparator[i]];
+    }
+    
+    if (i < itemsAfterSeparator.length) {
+      sumAfter += items[itemsAfterSeparator[i]];
+    }
+  }
   
-  for(let i = 0; i < itemsAfterSeparator.length; i++) 
-    sumAfter += items[itemsAfterSeparator[i]];
-  
-  // считаем profit от сделки
   const profit = ((sumAfter - sumBefore) * 100) / sumAfter;
-  profit < 0 ? (tradeStatus = "невыгодная", embedColor = "#ED4245") : (tradeStatus = "выгодная", embedColor = "#57F287");
+  profit < 0 ? (tradeStatus = 0, embedColor = "Red") : (tradeStatus = 1, embedColor = "Green");
 
-  // находим большее и меньшее число
-  let biggest = sumBefore > sumAfter ? sumBefore : sumAfter;
-  let smaller = sumBefore < sumAfter ? sumBefore : sumAfter;
+  const biggest = sumBefore > sumAfter ? sumBefore : sumAfter; 
+  const smaller = sumBefore < sumAfter ? sumBefore : sumAfter;
 
-  // проверяем если обмен равноценный
-  if(biggest - smaller <= 20) // заместо 20 можно написать число, которое будет давать "границу" FAIRY-трейду
-    tradeStatus = "равноценная", embedColor = "Blue";
+  if(biggest - smaller <= equalValueBoundary)
+    tradeStatus = -1, embedColor = "Blue";
 
   return { sumBefore, sumAfter, profit, embedColor, tradeStatus };
 }

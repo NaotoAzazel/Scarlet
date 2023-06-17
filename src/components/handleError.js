@@ -1,8 +1,9 @@
 const fs = require('fs');
-const rawData = fs.readFileSync("itemPrice.json");
-const items = JSON.parse(rawData);
+const itemPriceFilePath = "itemPrice.json";
+const rawItemData = fs.readFileSync(itemPriceFilePath);
+const items = JSON.parse(rawItemData);
 
-const fruitName = /(?<=\:).+?(?=\:)/g;
+const itemNameRegex = /(?<=\:).+?(?=\:)/g;
 
 /** 
   * Обработчик ошибок
@@ -10,25 +11,20 @@ const fruitName = /(?<=\:).+?(?=\:)/g;
   @returns {Array} Массив ошибок, которые записываються с новой строки
 */
 function handleErrors(args) {
-  const numOfArgs = args.length;
-  let errors = [], wrongWords = [];
-
-  for (let i = 0; i < numOfArgs; i++) {
-    // Проверка наличия элемента в JSON-файле
-    if (args[i].indexOf("👉") < 0) {
-      const matchResult = args[i].match(fruitName);
-      if (matchResult && matchResult.length > 0) {
-        const itemName = matchResult[0];
-        if (!items[itemName]) 
-          wrongWords.push(`<${args[i]}>`);
-      }
-    }
+  const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
+  const wrongWords = new Set(["Items not found: "]);
+	
+  for(let i = 0; i < args.length; i++) {
+    const currentArg = args[i];
+    const isInvalid = separatorPatterns.has(currentArg) || !currentArg.match(itemNameRegex) || items[currentArg.match(itemNameRegex)];
+    
+    if(isInvalid) 
+      continue;
+    
+    wrongWords.add(`<${args[i]}>`);
   }
 
-  if(wrongWords.length)
-    errors.push("Items not found: " + wrongWords.join(", "));
-  
-  return errors.join("\n");
+  return wrongWords;
 }
 
 module.exports = handleErrors;

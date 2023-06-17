@@ -7,40 +7,36 @@ const handleErrors = require("./handleError");
   *  так же массив предметов что пользователь обменивает и на что обменивает
 */
 function inputDataProcess(args) {
-  const fruitName = /(?<=\:).+?(?=\:)/g; // регулярное выражения для получения названия предмета из эмодзи
-  let numOfArgs = args.length, posOfSeparator = 0, itemsBeforeSeparator = [], itemsAfterSeparator = [];
+  const itemNameRegex = /(?<=\:).+?(?=\:)/g; // регулярное выражения для получения названия предмета из эмодзи
+  const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
+  
+  let itemsBeforeSeparator = [], itemsAfterSeparator = [];
   let trading = "", lf = "";
 
-  // обрабатываем ошибки и в случае их наявности завершаем програму
-  if(handleErrors(args).length)
+  if(handleErrors(args).size > 1)
     throw new Error(handleErrors(args));
 
-  // ищем разделитель
-  while(1) {
-    if(args[posOfSeparator].indexOf("👉") >= 0) 
-      break;
-    else
-      posOfSeparator++;
+  let separatorEncountered = false;  
+  for(let i = 0; i < args.length; i++) {
+    if(separatorPatterns.has(args[i])) {
+      separatorEncountered = true;
+      continue;
+    }
+    
+    if(!separatorEncountered) {
+      itemsBeforeSeparator.push(args[i].match(itemNameRegex)[0]);
+      trading += `<${args[i]}> `;
+    } else {
+      itemsAfterSeparator.push(args[i].match(itemNameRegex)[0]);
+      lf += `<${args[i]}> `;
+    }
   }
-
-  let l = 0;
-  // записываем предметы до разделителя и после разделителя
-  for(l; l < posOfSeparator; l++) {
-    itemsBeforeSeparator.push(args[l].match(fruitName)[0]);
-    trading += `<${args[l]}>` + " ";
-  };
-  l++ // инкрементируем счетчик, чтобы не записался разделитель в массив
   
-  for(l; l < numOfArgs; l++) {
-    itemsAfterSeparator.push(args[l].match(fruitName)[0]);
-    lf += `<${args[l]}>` + " ";
-  }
-
   return {
     itemsBeforeSeparator, 
     itemsAfterSeparator,
-    tradeResult: trading,
-    lfResult: lf,
+    trading,
+    lf,
   };
 }  
 
