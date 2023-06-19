@@ -6,18 +6,6 @@ const utils = require("./components/utils");
 
 const TOKEN = process.env.TOKEN;
 
-const items = {
-  "torit": {
-    "dmg": 50,
-    "levelCap": 100,
-  },
-
-  "gorot": {
-    "dmg": 100,
-    "levelCap": 250,
-  },
-};
-
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_KEY,
@@ -75,7 +63,11 @@ client.on("messageCreate", async(message) => {
   if(!tradePromptString.test(message.content)) 
     return;
 
-  const args = message.content.split(/<(.*?)\>/g).filter(Boolean).map(text => text.replace(/\s/g, ""));
+  const args = message.content.split(/<(.*?)\>/g)
+    .filter(Boolean)
+    .filter(text => text.trim() !== "")
+    .map(text => text.replace(/\s/g, ""));
+  console.log(args);
 
   const lastModifiedDate = utils.getLastModifiedTime("itemPrice.json");
   const discordTimestamp = utils.getDiscordTimestamp(lastModifiedDate);
@@ -110,6 +102,8 @@ client.on("messageCreate", async(message) => {
 
     message.reply({embeds: [replyEmbed]});
   } catch(error) {
+    console.log(error.message);
+
     const errorEmbed = new EmbedBuilder()
       .setTitle("Ошибка")
       .setDescription(error.message)

@@ -13,24 +13,24 @@ function inputDataProcess(args) {
   let itemsBeforeSeparator = [], itemsAfterSeparator = [];
   let trading = "", lf = "";
 
-  if(handleErrors(args).length > 1)
+  if(handleErrors(args).length > 35)
     throw new Error(handleErrors(args));
-
+    
   let separatorEncountered = false;  
   for(let i = 0; i < args.length; i++) {
     if(separatorPatterns.has(args[i])) {
       separatorEncountered = true;
       continue;
     }
-    
+  
     if(!separatorEncountered) {
       itemsBeforeSeparator.push(args[i].match(itemNameRegex)[0]);
       trading += `<${args[i]}> `;
     } else {
       itemsAfterSeparator.push(args[i].match(itemNameRegex)[0]);
       lf += `<${args[i]}> `;
-    }
-  }
+    };
+  };
   
   return {
     itemsBeforeSeparator, 
