@@ -67,7 +67,6 @@ client.on("messageCreate", async(message) => {
     .filter(Boolean)
     .filter(text => text.trim() !== "")
     .map(text => text.replace(/\s/g, ""));
-  console.log(args);
 
   const lastModifiedDate = utils.getLastModifiedTime("itemPrice.json");
   const discordTimestamp = utils.getDiscordTimestamp(lastModifiedDate);
@@ -82,12 +81,15 @@ client.on("messageCreate", async(message) => {
     switch(tradeStatus) {
       case -1: {
         statusString = `**Это равноценная сделка** | В этой сделки вы ничего не потеряли и не получили`;
+        break;
       };
       case 0: {
         statusString = `**Это невыгодная сделка** | Вы потеряли ${formattedProfit}% из этой сделки`;
+        break;
       };
       case 1: {
         statusString = `**Это выгодная сделка** | Вы получили ${formattedProfit}% из этой сделки`;
+        break;
       }
     }
     
@@ -102,8 +104,6 @@ client.on("messageCreate", async(message) => {
 
     message.reply({embeds: [replyEmbed]});
   } catch(error) {
-    console.log(error.message);
-
     const errorEmbed = new EmbedBuilder()
       .setTitle("Ошибка")
       .setDescription(error.message)
@@ -117,4 +117,4 @@ client.on("messageCreate", async(message) => {
   }
 })
 
-client.login(TOKEN)
+client.login(TOKEN);
