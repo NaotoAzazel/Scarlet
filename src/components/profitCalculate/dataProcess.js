@@ -13,7 +13,7 @@ function inputDataProcess(args) {
   let itemsBeforeSeparator = [], itemsAfterSeparator = [];
   let trading = "", lf = "";
 
-  if(handleErrors(args).size > 1)
+  if(handleErrors(args).length > 1)
     throw new Error(handleErrors(args));
 
   let separatorEncountered = false;  
