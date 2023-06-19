@@ -1,10 +1,22 @@
 require("dotenv").config();
 
-const inputDataProcess = require("./components/dataProcess");
-const profitCalculate = require("./components/profitCalculate");
+const inputDataProcess = require("./components/profitCalculate/dataProcess.js");
+const profitCalculate = require("./components/profitCalculate/profitCalculate.js");
 const utils = require("./components/utils");
 
 const TOKEN = process.env.TOKEN;
+
+const items = {
+  "torit": {
+    "dmg": 50,
+    "levelCap": 100,
+  },
+
+  "gorot": {
+    "dmg": 100,
+    "levelCap": 250,
+  },
+};
 
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
@@ -12,13 +24,14 @@ const configuration = new Configuration({
 });
 const openAI = new OpenAIApi(configuration);
 
-const { Client, EmbedBuilder, GatewayIntentBits, PermissionFlagsBits } = require("discord.js");
+const { Client, EmbedBuilder, GatewayIntentBits, PermissionFlagsBits, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-  ]
+  ],
 });
 
 client.on("ready", () => {
@@ -63,7 +76,6 @@ client.on("messageCreate", async(message) => {
     return;
 
   const args = message.content.split(/<(.*?)\>/g).filter(Boolean).map(text => text.replace(/\s/g, ""));
-  console.log(args);
 
   const lastModifiedDate = utils.getLastModifiedTime("itemPrice.json");
   const discordTimestamp = utils.getDiscordTimestamp(lastModifiedDate);
@@ -98,7 +110,16 @@ client.on("messageCreate", async(message) => {
 
     message.reply({embeds: [replyEmbed]});
   } catch(error) {
-    console.log(error.message);
+    const errorEmbed = new EmbedBuilder()
+      .setTitle("Ошибка")
+      .setDescription(error.message)
+      .setColor("Red")
+
+    const sentMessage = await message.reply({embeds: [errorEmbed]});
+
+    setTimeout(() => {
+      sentMessage.delete();
+    }, 5000);
   }
 })
 

@@ -12,7 +12,7 @@ const itemNameRegex = /(?<=\:).+?(?=\:)/g;
 */
 function handleErrors(args) {
   const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
-  const wrongWords = new Set(["Items not found: "]);
+  const wrongWords = ["Не удалось найти цены на предметы: "];
 	
   for(let i = 0; i < args.length; i++) {
     const currentArg = args[i];
@@ -21,10 +21,10 @@ function handleErrors(args) {
     if(isInvalid) 
       continue;
     
-    wrongWords.add(`<${args[i]}>`);
+    wrongWords.push(`<${args[i]}>`);
   }
 
-  return wrongWords;
+  return wrongWords.join(" ");
 }
 
 module.exports = handleErrors;
