@@ -1,0 +1,119 @@
+{
+  "Прокачка": {
+    "10-20": {
+      "fields": {
+        "Уровень": "10-20",
+        "Локация": "Kleychatka island",
+        "Способ": "При достижении 10-го уровня в нашем захватывающем приключении в мире Grand Piece Online, открывается новая глава нашего путешествия. Морские волны разносят нас к острову Клейча, месту, полному тайн и опасностей. Среди мрачных лесов и густой растительности острова Клейча скрываются древние руины, свидетельствующие о его богатой истории. Таинственные артефакты и сокровища ожидают отважных искателей приключений, готовых исследовать каждый уголок этого загадочного места."
+      },
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/c/c9/Spawn_2.jpg/revision/latest/scale-to-width-down/349?cb=20200729221833"
+    },
+    "20-50": {
+      "fields": {
+        "Уровень": "20-50",
+        "Локация": "Naoto island",
+        "Способ": "Начиная с 10 уровня отправляемся на остров Наото..."
+      }
+    },
+    "100-150": {
+      "fields": {
+        "Информация": "Это дьявольский плод типа мифический зоан, который позволяет своему пользователю превращаться в феникса и гибрид феникса и человека. Он был съеден Марко, но был назван только в Vivre Card - One Piece Visual Dictionary.",
+        "Редкость": "Collactable"
+      },
+      "author": "Kleychatka",
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/c/c9/Spawn_2.jpg/revision/latest/scale-to-width-down/349?cb=20200729221833"
+    }
+  },
+
+  "Фрукты": { 
+    "torit": {
+      "titleImage": "https://cdn.discordapp.com/attachments/1102306903196975164/1124617191518642216/firefox_pxzVp3NaJa.png",
+      "fields": {
+        "Информация": "Это дьявольский плод типа мифический зоан, который позволяет своему пользователю превращаться в феникса и гибрид феникса и человека. Он был съеден Марко, но был назван только в Vivre Card - One Piece Visual Dictionary.",
+        "Пасивки": "When using Phoenix brand try to hold it for a short time to mess up people trying to perfect block it.\nIf you get Perfect blocked or hit by a freezing move such as Pheasant Beak while holding Talon Barrage, keep holding it since it won't stop the move and you can avoid getting punished.\nLearn to Kirby dash, since both Talon Barrage and Triple Talon Kick can be used after doing a Kirby dash instead of doing only 4 m1s and updrafting."
+      },
+      "skills": [
+        { "key": "f", "skill": "fly", "info": "When equipping Tori Tori no Mi from the Hotbar the user turns their feet into phoenix talons. They can be used as M1 Damage that scales off of Sword Mastery Phoenix Talons can hit Logia Users without the need for Buso HakiBase DMG of Talons" },
+        { "key": "k", "skill": "attack", "info": "With bursting blue flames, the user does a fore kick before performing a 360-spin kick around themselves and completing it off with a roundhouse kick to the chest that smashes block. " },
+        { "key": "h", "skill": "heal", "info": "Similar to Demon Step's \"Demon Spectrum\", The user extends their leg to deliver a quick burst of kicks propelled by the phoenix's flames. Damage Cap at 11 with 315 df " }
+      ],
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/1/18/Torirevision.png/revision/latest?cb=20221225102637"
+    }
+  },
+
+  "Предметы": {
+    "Jester outfit": {
+      "fields": {
+        "Шанс выпадения": "0.5%",
+        "Трейд левел": 400,
+        "Редкость": "Collactable",
+        "Получение": "Halloween Event 2021"
+      },
+      "author": "NaotoAzazel",
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/d/d6/Jester_outfit.png/revision/latest/scale-to-width-down/350?cb=20211108140612"
+    },
+    "Kraken core": {
+      "fields": {
+        "Шанс выпадения": "1%",
+        "Трейд левел": 400,
+        "Редкость": "Collactable",
+        "Получение": "kill sea beast"
+      },
+      "author": "Kleychatka",
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/5/58/KKCoreHigherQ.gif/revision/latest/scale-to-width-down/350?cb=20211014230334"
+    }
+  },
+  
+  "Боссы": {
+    "Ze blade": {
+      "fields": {
+        "Локация": "Naoto island",
+        "Дроп с босса": [
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"},
+          { "item": "Bandit eyepatch", "dropRate": "20%"}
+        ],
+        "Пасивки": "adsadas",
+        "Уровень": 500
+      }
+    },
+    "Bandit boss": {
+      "fields": {
+        "Локация": "Town Of Begginers",
+        "Дроп с босса": [
+          { "item": "Bandit eyepatch", "dropRate": "50%" }
+        ]
+      },
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/1/13/RobloxScreenShot20211010_121103713_%282%29.png/revision/latest?cb=20211010061336"
+    },
+    "Lucid": {
+      "fields": {
+        "Локация": "Sandora",
+        "Дроп с босса": [
+          { "item": "Bazooka", "dropRate": "25%" }
+        ]
+      },
+      "image":"https://static.wikia.nocookie.net/grand-piece-online/images/e/e8/BazookaPlayer.png/revision/latest/scale-to-width-down/350?cb=20210802151235"
+    },
+    "Musachi": {
+      "fields": {
+        "Локация": "Castle of Shadows",
+        "Дроп с босса": [
+          { "item": "Musashi’s Crimson Katana", "dropRate": "100%" },
+          { "item": "Musashi’s Rose Katana", "dropRate": "50%" },
+          { "item": "Musashi’s Hat", "dropRate": "1%" },
+          { "item": "Musashi’s Karuta", "dropRate": "1%"}
+        ]
+      },
+      "author": "NaotoAzazel",
+      "image": "https://static.wikia.nocookie.net/grand-piece-online/images/0/01/Musashigpofixed.png/revision/latest/scale-to-width-down/350?cb=20210929052614"
+    }
+  }
+}

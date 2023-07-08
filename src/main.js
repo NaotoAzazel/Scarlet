@@ -1,18 +1,13 @@
 require("dotenv").config();
+const fs = require("fs");
 
-const inputDataProcess = require("./components/profitCalculate/dataProcess.js");
-const profitCalculate = require("./components/profitCalculate/profitCalculate.js");
-const utils = require("./components/utils");
+const createResultEmbed = require("./components/helpCommand/createResultEmbed.js");
+const loadEvents = require("./handlers/eventHandler.js");
+const { createSelectMenuList } = require("./components/utils.js")
 
 const TOKEN = process.env.TOKEN;
 
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_KEY,
-});
-const openAI = new OpenAIApi(configuration);
-
-const { Client, EmbedBuilder, GatewayIntentBits, PermissionFlagsBits, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js");
+const { Client, EmbedBuilder, GatewayIntentBits } = require("discord.js");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -22,99 +17,86 @@ const client = new Client({
   ],
 });
 
-client.on("ready", () => {
-  console.log("Bot online");
-});
+// help command 
+client.on("interactionCreate", async(interaction) => {
+  if(!(interaction.isChatInputCommand() && interaction.commandName === "help")) return;
 
-// ИИ для администрации
-client.on("messageCreate", async(message) => {
-  if(!message.member.permissions.has(PermissionFlagsBits.Administrator)) return;
-  if(!message.content.startsWith(`<@${client.user.id}>`)) return;
-  if(message.author.bot) return;
+  const categoryType = {
+    "Фрукты": "Информация о фруках режима \"Grand Piece Online\"", 
+    "Предметы": "Информация о предметах режима \"Grand Piece Online\"",
+    "Боссы": "Информация о боссах режима \"Grand Piece Online\"",
+    "Прокачка": "Информация о самой эфективной прокачке режима \"Grand Piece Online\"",
+  };
+
+  const informationEmbed = new EmbedBuilder()
+    .setTitle("Выберете категорию, о которой хотите узнать подробную информацию")
+    .setColor("Red")
+
+  const categoryTypeRow = createSelectMenuList(
+    "Выберите категорию", 
+    categoryType, 
+    interaction, 
+    true
+  );
+
+  const replyInteraction = await interaction.reply({
+    embeds: [informationEmbed], 
+    components: [categoryTypeRow], 
+    ephemeral: true
+  });
   
-  let conversationLog = [{role: "system", content: "You are a friendly chatbot."}];
-  
-  conversationLog.push({
-    role: "user",
-    content: message.content.slice(22) // обрезаем на 22, чтобы убрался пинг(<@botId>) бота в начале сообщения,
+  const collector = replyInteraction.createMessageComponentCollector({
+    filter: (user) => (user.user.id === interaction.user.id),
   });
 
-  // бот печатает отображение
-  await message.channel.sendTyping();
+  const history = [];
 
-  try {
-    const response = await openAI.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: conversationLog,
+  collector.on("collect", async(selectedInteraction) => {
+    const rawData = fs.readFileSync("dataBase.json");
+    const jsonData = JSON.parse(rawData);
+    
+    const selectedCategory = selectedInteraction.values[0];
+    const selectedCategoryObject = jsonData[selectedCategory] || {};
+    
+    const sortedKeys = Object.keys(selectedCategoryObject).sort();
+    console.log(sortedKeys);
+    
+    const sortedObject = {};
+    sortedKeys.forEach(key => {
+      sortedObject[key] = selectedCategoryObject[key];
     });
+    console.log(sortedObject);
     
-    message.reply(response.data.choices[0].message);
-  } catch(err) {
-    console.log(err);
-  }
-})
-
-// Анализирует и выводит результат обработки сделки
-client.on("messageCreate", async(message) => {
-  if(message.author.bot || message.channelId !== process.env.TRADE_CHANNEL) return;
-  const tradePromptString = /<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*\s*👉(?:\p{Emoji_Modifier_Base}\p{Emoji_Modifier}*\s*)*(?:<:[^:]+:\d+>(?:\s*<:[^:]+:\d+>)*)*/u;
-
-  // Проверяет тип сообщения, является ли оно обычным или специальным
-  if(!tradePromptString.test(message.content)) 
-    return;
-
-  const args = message.content.split(/<(.*?)\>/g)
-    .filter(Boolean)
-    .filter(text => text.trim() !== "")
-    .map(text => text.replace(/\s/g, ""));
-
-  const lastModifiedDate = utils.getLastModifiedTime("itemPrice.json");
-  const discordTimestamp = utils.getDiscordTimestamp(lastModifiedDate);
-
-  try {
-    const { trading: tradeResult, lf: lfResult, itemsBeforeSeparator, itemsAfterSeparator } = inputDataProcess(args);
-    const { sumBefore, sumAfter, profit, embedColor, tradeStatus } = profitCalculate(itemsBeforeSeparator, itemsAfterSeparator);
+    informationEmbed.setTitle(`Вы успешно выбрали категорию ${selectedCategory}. Выберете объект из списка ниже, о котором хотите узнать подробную информацию`);
     
-    const formattedProfit = Math.abs(profit).toFixed(2);
-    let statusString;
+    const listOfObjectsRow = createSelectMenuList(
+      selectedCategory === "Прокачка" ? "Выберите способ прокачки" : "Выберите объект. Объкты в алфавитном порядке A-Z",
+      sortedObject, 
+      interaction, 
+      false
+    );
+    
+    if(categoryType[selectedCategory]) {
+      selectedInteraction.update({embeds: [informationEmbed], components: [listOfObjectsRow]});
+      history.push(selectedCategory);
+    }
 
-    switch(tradeStatus) {
-      case -1: {
-        statusString = `**Это равноценная сделка** | В этой сделки вы ничего не потеряли и не получили`;
-        break;
-      };
-      case 0: {
-        statusString = `**Это невыгодная сделка** | Вы потеряли ${formattedProfit}% из этой сделки`;
-        break;
-      };
-      case 1: {
-        statusString = `**Это выгодная сделка** | Вы получили ${formattedProfit}% из этой сделки`;
-        break;
+    if(!categoryType[selectedCategory]) {
+      history.push(selectedCategory);
+
+      try {
+        const result = await createResultEmbed(history[0], history[1], history); // заменить входные данные history[0], history[1] на объект или сэт
+        console.log(result);
+
+        interaction.deleteReply();
+        interaction.followUp({embeds: result, components: [], ephemeral: false});
+      } catch(err) {
+        console.error(err);
       }
     }
-    
-    const replyEmbed = new EmbedBuilder()
-      .setDescription(statusString)
-      .addFields(
-        {name: `Trading: ${sumBefore}`, value: tradeResult, inline: true},
-        {name: `LF: ${sumAfter}`, value: lfResult, inline: true},
-        {name: `Цены обновлялись: ${discordTimestamp}`, value: "Values aren't exact, follow this advice at your own risk"}
-      )
-      .setColor(embedColor)
+  });
+});
 
-    message.reply({embeds: [replyEmbed]});
-  } catch(error) {
-    const errorEmbed = new EmbedBuilder()
-      .setTitle("Ошибка")
-      .setDescription(error.message)
-      .setColor("Red")
-
-    const sentMessage = await message.reply({embeds: [errorEmbed]});
-
-    setTimeout(() => {
-      sentMessage.delete();
-    }, 5000);
-  }
-})
-
-client.login(TOKEN);
+client.login(TOKEN).then(() => {
+  loadEvents(client);
+});
