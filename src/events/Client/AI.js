@@ -1,13 +1,13 @@
-const { PermissionFlagsBits } = require("discord.js");
+import  { PermissionFlagsBits } from "discord.js";
 
-const { Configuration, OpenAIApi } = require("openai");
+import { Configuration, OpenAIApi } from "openai";
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_KEY,
 });
 const openAI = new OpenAIApi(configuration);
 
 // ИИ для администрации
-module.exports = {
+export default {
   name: "messageCreate",
   once: false,
   async execute(message, client) {

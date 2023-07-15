@@ -1,16 +1,14 @@
-const fs = require('fs');
+import { getJSONData } from "../utils.js";
 const itemPriceFilePath = "itemPrice.json";
-const rawItemData = fs.readFileSync(itemPriceFilePath);
-const items = JSON.parse(rawItemData);
+const items = getJSONData(itemPriceFilePath);
 
 const itemNameRegex = /(?<=\:).+?(?=\:)/g;
 
 /** 
-  * Обработчик ошибок
-  @param {string} args - Входные данные
-  @returns {Array} Массив ошибок, которые записываються с новой строки
+  @param {string} args 
+  @returns {Array} Массив ошибок
 */
-function handleErrors(args) {
+export default function handleErrors(args) {
   const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
   const wrongWords = ["Не удалось найти цены на предметы: "];
 	
@@ -26,5 +24,3 @@ function handleErrors(args) {
 
   return wrongWords.join(" ");
 }
-
-module.exports = handleErrors;

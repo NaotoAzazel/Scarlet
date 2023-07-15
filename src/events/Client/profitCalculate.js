@@ -1,10 +1,10 @@
-const { EmbedBuilder } = require("discord.js");
-const profitCalculate = require("../../components/profitCalculate/profitCalculate");
-const inputDataProcess = require("../../components/profitCalculate/dataProcess");
-const { getLastModifiedTime, getDiscordTimestamp } = require("../../components/utils");
+import { EmbedBuilder } from "discord.js";
+import profitCalculate from "../../components/profitCalculate/profitCalculate.js";
+import inputDataProcess from "../../components/profitCalculate/dataProcess.js";
+import { getLastModifiedTime, getDiscordTimestamp, createErrorEmbed } from "../../components/utils.js";
 
 // Анализирует и выводит результат обработки сделки
-module.exports = {
+export default {
   name: "messageCreate",
   once: false,
   async execute(message) {
@@ -53,13 +53,9 @@ module.exports = {
 
       message.reply({embeds: [replyEmbed]});
     } catch(error) {
+      const errorEmbed = createErrorEmbed(error.message);
+
       console.log("Error: ", error.message);
-
-      const errorEmbed = new EmbedBuilder()
-        .setTitle("Ошибка")
-        .setDescription(error.message)
-        .setColor("Red")
-
       const sentMessage = await message.reply({embeds: [errorEmbed]});
 
       setTimeout(() => {

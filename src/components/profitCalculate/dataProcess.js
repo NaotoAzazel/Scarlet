@@ -1,4 +1,4 @@
-const handleErrors = require("./handleError");
+import handleErrors from "./handleError.js";
 
 /** 
   * Обрабатывает строку предметов, введеных пользователем 
@@ -6,7 +6,7 @@ const handleErrors = require("./handleError");
   * @returns {object} Объект, который содержит предметов до разделителя и после,
   *  так же массив предметов что пользователь обменивает и на что обменивает
 */
-function inputDataProcess(args) {
+export default function inputDataProcess(args) {
   const itemNameRegex = /(?<=\:).+?(?=\:)/g; // регулярное выражения для получения названия предмета из эмодзи
   const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
   
@@ -39,5 +39,3 @@ function inputDataProcess(args) {
     lf,
   };
 }  
-
-module.exports = inputDataProcess;
