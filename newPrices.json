@@ -1,0 +1,59 @@
+{
+  "Фрукты": {
+    "pika": 225,
+    "yuki": 50,
+    "magu": 85,
+    "yami": 20,
+    "zushi": 20003,
+    "goro": 15,
+    "hie": 10,
+    "suna": 40,
+    "kage": 35,
+    "gura": 20,
+    "paw": 10,
+    "mochi": 1700,
+    "darkroot": 20,
+    "goldenbari": 100000,
+    "testNewFruit": 1233,
+    "golden": 1344444
+  },
+  "Предметы": {
+    "AllSeeingEye": 5300,
+    "legendary_chest": 100,
+    "5legendary_chest": 500,
+    "10legendary_chest": 1000,
+    "coffinboat": 250,
+    "pbag": 9675,
+    "rare_chest": 25,
+    "fruitbag": 100
+  },
+  "Броня": {
+    "azure_armor": 625,
+    "kk_armor": 5,
+    "jfit": 7350,
+    "ryuma_scarf": 150,
+    "kk_armor_1": 100
+  },
+  "Оружие": {
+    "Trident": 115,
+    "soulcane": 525,
+    "candycane": 10,
+    "SoulKingViolin": 35,
+    "iceborn_rapier": 650,
+    "iceborn_daggers": 375,
+    "elo_hammer": 325,
+    "WorldEnder": 2300,
+    "jesterscythe": 150,
+    "flowers": 2800,
+    "scarfbrook": 8250
+  },
+  "Другое": {
+    "spreset": 5,
+    "testitem": 10,
+    "tori": 30000
+  },
+  "Тестовою категорию": {
+    "tori": 30000,
+    "pika": 1000
+  }
+}
