@@ -20,7 +20,7 @@ export default {
       .filter(text => text.trim() !== "")
       .map(text => text.replace(/\s/g, ""));
 
-    const lastModifiedDate = getLastModifiedTime("itemPrice.json");
+    const lastModifiedDate = getLastModifiedTime("newPrices.json");
     const discordTimestamp = getDiscordTimestamp(lastModifiedDate);
 
     try {
@@ -57,8 +57,6 @@ export default {
       message.reply({embeds: [replyEmbed]});
     } catch(error) {
       const errorEmbed = createErrorEmbed(error.message);
-
-      console.log("Error: ", error.message);
       const sentMessage = await message.reply({embeds: [errorEmbed]});
 
       setTimeout(() => {
