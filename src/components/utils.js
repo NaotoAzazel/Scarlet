@@ -7,13 +7,9 @@ import fs from "fs";
 
 /**
  * @param {string} path 
- * @returns {Array} Данные файла
+ * @returns {object} Данные файла
  */
-function getJSONData(path) {
-  const rawData = fs.readFileSync(path);
-  const jsonData = JSON.parse(rawData);
-  return jsonData;
-};
+const getJSONData = (path) => JSON.parse(fs.readFileSync(path));
 
 /**
  * Получает время последнего изменения файл с ценами на предметы
