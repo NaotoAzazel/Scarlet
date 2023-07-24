@@ -4,7 +4,7 @@ export default {
   name: "messageCreate",
   once: false,
   async execute(message) {
-    if(!message.content.startsWith("!say") || !message.member.permissions.has(PermissionFlagsBits.Administrator)) return;
+    if(!message.content.startsWith("!say") || !message.member.permissions.has(PermissionFlagsBits.ManageRoles)) return;
     message.delete();
 
     try {
