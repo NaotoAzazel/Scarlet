@@ -1,9 +1,8 @@
 import handleErrors from "./handleError.js";
 
 /** 
-  * Обрабатывает строку предметов, введеных пользователем 
-  * @param {string} args - Входные данные
-  * @returns {object} Объект, который содержит предметов до разделителя и после,
+  * @param {string} args
+  * @returns {Array} - Предметы до разделителя и после,
   *  так же массив предметов что пользователь обменивает и на что обменивает
 */
 export default function inputDataProcess(args) {
@@ -15,7 +14,7 @@ export default function inputDataProcess(args) {
 
   if(handleErrors(args).length > 35)
     throw new Error(handleErrors(args));
-    
+
   let separatorEncountered = false;  
   for(let i = 0; i < args.length; i++) {
     if(separatorPatterns.has(args[i])) {
