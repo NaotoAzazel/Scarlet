@@ -1,5 +1,3 @@
-import handleErrors from "./handleError.js";
-
 /** 
   * @param {string} args
   * @returns {Array} - Предметы до разделителя и после,
@@ -11,9 +9,6 @@ export default function inputDataProcess(args) {
   
   let itemsBeforeSeparator = [], itemsAfterSeparator = [];
   let trading = "", lf = "";
-
-  if(handleErrors(args).length > 35)
-    throw new Error(handleErrors(args));
 
   let separatorEncountered = false;  
   for(let i = 0; i < args.length; i++) {
