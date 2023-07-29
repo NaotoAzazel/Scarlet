@@ -11,14 +11,19 @@ const equalValueBoundary = 20; // заместо 20 можно написать 
 */
 export default function profitCalculate(itemsBeforeSeparator, itemsAfterSeparator) {
   function getPriceSum(items) {
-    return items.reduce((sum, item) => {
-      Object.keys(allItemsPrice).forEach(category => {
-        if (allItemsPrice[category]?.[item]) {
-          sum += allItemsPrice[category][item];
+    let sum = 0;
+
+    for(let i = 0; i < items.length; i++) {
+      const currentArg = items[i];
+
+      for(const category in allItemsPrice) {
+        if(allItemsPrice[category]?.[currentArg]) {
+          sum += allItemsPrice[category][currentArg];
         }
-      });
-      return sum;
-    }, 0);
+      }
+    }
+
+    return sum;
   }
 
   const sumBefore = getPriceSum(itemsBeforeSeparator);
