@@ -1,9 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import profitCalculate from "../../components/profitCalculate/profitCalculate.js";
 import inputDataProcess from "../../components/profitCalculate/dataProcess.js";
-import { getLastModifiedTime, getDiscordTimestamp } from "../../components/utils.js";
+import { getLastModifiedTime, getDiscordTimestamp, createErrorEmbed } from "../../components/utils.js";
 
-// Анализирует и выводит результат обработки сделки
 export default {
   name: "messageCreate",
   once: false,
@@ -55,6 +54,15 @@ export default {
         .setColor(embedColor)
 
       message.reply({embeds: [replyEmbed]});
-    } catch(error) {}
+    } catch(error) {
+      const errorEmbed = createErrorEmbed(error.message);
+
+      console.log("Error: ", error.message);
+      const sentMessage = await message.reply({embeds: [errorEmbed]});
+
+      setTimeout(() => {
+        sentMessage.delete();
+      }, 5000);
+    }
   }
 };
