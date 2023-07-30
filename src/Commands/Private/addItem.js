@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from "discord.js";
-import { createErrorEmbed, getJSONData } from "../../components/utils.js";
+import { createErrorEmbed, getJSONData, createLogEmbed } from "../../components/utils.js";
 import fs from "fs";
 
 const categories = Object.keys(getJSONData("newPrices.json")).map(category => {
@@ -11,7 +11,7 @@ const categories = Object.keys(getJSONData("newPrices.json")).map(category => {
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("add_item")
+    .setName("add")
     .setDescription("Добавляет предмет в файл цен")
     .addStringOption(option => 
       option.setName("item_category")
@@ -49,15 +49,9 @@ export default {
 
       fs.writeFileSync("newPrices.json", jsonString, "utf-8");
       
-
       const logChannelId = process.env.LOG_CHANNEL;
       const sentMessage = await client.channels.cache.get(logChannelId);
-
-      const logEmbed = new EmbedBuilder()
-        .setTitle("Добавление предмета")
-        .setColor("Blue")
-        .setDescription(`Ник: ${interaction.user.username}, ID: ${interaction.user.id}\nДобавил **${itemName}** с ценой **${price}** в категорию **${itemCategory}**`)
-        .setTimestamp()
+      const logEmbed = createLogEmbed("Добавление предмета", interaction, `Добавил **${itemName}** с ценой **${price}** в категорию **${itemCategory}**`)
 
       sentMessage.send({ content: `<@${interaction.user.id}>`, embeds: [logEmbed] });
       await interaction.reply({ content: `Предмет с названием "${itemName}" и ценой "${price}" был успешно записан в файл`, ephemeral: true });

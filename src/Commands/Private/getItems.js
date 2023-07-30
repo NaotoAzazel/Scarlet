@@ -5,9 +5,9 @@ function createFields(object) {
   return Object.keys(object).map(categoryName => {
     const categoryFields = object[categoryName];
     const categoryString = Object.keys(categoryFields)
-      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })) // сортировка в алфавитном порядке
+      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })) // сортировка в алфавитном порядке
       .map(fieldName => `${fieldName}: ${categoryFields[fieldName]}`)
-      .join('\n');
+      .join("\n");
 
     return {
       name: categoryName,
@@ -19,7 +19,7 @@ function createFields(object) {
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("get_items")
+    .setName("items")
     .setDescription("Выводит содержимое файла с ценами")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
