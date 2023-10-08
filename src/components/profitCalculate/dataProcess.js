@@ -1,21 +1,21 @@
-const handleErrors = require("./handleError");
+import handleError from "./handleError.js";
 
 /** 
-  * Обрабатывает строку предметов, введеных пользователем 
-  * @param {string} args - Входные данные
-  * @returns {object} Объект, который содержит предметов до разделителя и после,
+  * @param {string} args
+  * @returns {Array} - Предметы до разделителя и после,
   *  так же массив предметов что пользователь обменивает и на что обменивает
 */
-function inputDataProcess(args) {
+export default function inputDataProcess(args) {
   const itemNameRegex = /(?<=\:).+?(?=\:)/g; // регулярное выражения для получения названия предмета из эмодзи
   const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
   
   let itemsBeforeSeparator = [], itemsAfterSeparator = [];
   let trading = "", lf = "";
 
-  if(handleErrors(args).length > 35)
-    throw new Error(handleErrors(args));
-    
+  if(handleError(args).length > 35) {
+    throw new Error(handleError(args));
+  }
+
   let separatorEncountered = false;  
   for(let i = 0; i < args.length; i++) {
     if(separatorPatterns.has(args[i])) {
@@ -39,5 +39,3 @@ function inputDataProcess(args) {
     lf,
   };
 }  
-
-module.exports = inputDataProcess;

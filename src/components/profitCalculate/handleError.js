@@ -1,30 +1,27 @@
-const fs = require('fs');
-const itemPriceFilePath = "itemPrice.json";
-const rawItemData = fs.readFileSync(itemPriceFilePath);
-const items = JSON.parse(rawItemData);
+import { getJSONData } from "../utils.js";
+const allPrices = getJSONData("newPrices.json");
 
 const itemNameRegex = /(?<=\:).+?(?=\:)/g;
 
-/** 
-  * Обработчик ошибок
-  @param {string} args - Входные данные
-  @returns {Array} Массив ошибок, которые записываються с новой строки
-*/
-function handleErrors(args) {
+export default function handleError(args) {
   const separatorPatterns = new Set(["👉", "👉🏻", "👉🏼", "👉🏽", "👉🏾", "👉🏿"]);
   const wrongWords = ["Не удалось найти цены на предметы: "];
-	
+  
   for(let i = 0; i < args.length; i++) {
+    let isFind = false;
     const currentArg = args[i];
-    const isInvalid = separatorPatterns.has(currentArg) || !currentArg.match(itemNameRegex) || items[currentArg.match(itemNameRegex)];
-    
-    if(isInvalid) 
-      continue;
-    
-    wrongWords.push(`<${args[i]}>`);
-  }
+
+    for(const category in allPrices) {
+      if(allPrices[category]?.[currentArg.match(itemNameRegex)]) {
+        isFind = true;
+        break;
+      }
+    }
+
+    if(!isFind && !separatorPatterns.has(currentArg)) {
+      wrongWords.push(`<${currentArg}>`);
+    }
+  } 
 
   return wrongWords.join(" ");
 }
-
-module.exports = handleErrors;
