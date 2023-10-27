@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config();
 
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from "discord.js";
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import { createErrorEmbed, getJSONData, createLogEmbed } from "../../components/utils.js";
 import fs from "fs";
 
