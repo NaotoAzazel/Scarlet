@@ -36,9 +36,10 @@ export const getLastModifiedTime = (filePath) => new Date(fs.statSync(filePath).
 /**
  * Переводит время в timestamp Дискорд-формата
  * @param {date} date Дата изменения файла
+ * @param {string} type Тим отображаемой даты
  * @returns {string} timestamp Дискорд-формата
  */
-export const getDiscordTimestamp = (date) => `<t:${Math.floor(date.getTime() / 1000)}:D>`
+export const getDiscordTimestamp = (date, type = "D") => `<t:${Math.floor(date.getTime() / 1000)}:${type}>`
 
 /**
  * @param {string} placeHolder Заголовок
@@ -92,7 +93,7 @@ export function createErrorEmbed(description) {
  * @param {string} title 
  * @param {interaction} interaction 
  * @param {string} description 
- * @returns 
+ * @returns {object} embed
  */
 export function createLogEmbed(title, interaction, description) {
   const embedColors = {
@@ -113,7 +114,7 @@ export function createLogEmbed(title, interaction, description) {
 /**
  * @param {string} a 
  * @param {string} b 
- * @returns 
+ * @returns {Array}
  */
 function calculateLevenshteinDistance(a, b) {
   const m = a.length;
@@ -142,6 +143,11 @@ function calculateLevenshteinDistance(a, b) {
   return dp[m][n];
 }
 
+/**
+ * @param {Array} allItems 
+ * @param {string} targetItemName 
+ * @returns {string} 
+ */
 export function getClosestItem(allItems, targetItemName) {
   let closestItem = null;
   let minDistance = Infinity;
