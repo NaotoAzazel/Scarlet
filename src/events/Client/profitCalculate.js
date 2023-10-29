@@ -17,7 +17,7 @@ export default {
 
     const args = message.content.split(/<(.*?)\>/g).filter(Boolean).map(text => text.replace(/\s/g, ""));
 
-    const lastModifiedDate = getLastModifiedTime("itemPrice.json");
+    const lastModifiedDate = getLastModifiedTime("newPrices.json");
     const discordTimestamp = getDiscordTimestamp(lastModifiedDate);
 
     try {

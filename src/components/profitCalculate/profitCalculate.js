@@ -10,6 +10,8 @@ const equalValueBoundary = 20; // заместо 20 можно написать 
   * процент выгодности
 */
 export default function profitCalculate(itemsBeforeSeparator, itemsAfterSeparator) {
+  let tradeStatus = 0, embedColor;
+
   function getPriceSum(items) {
     let sum = 0;
 
@@ -30,8 +32,13 @@ export default function profitCalculate(itemsBeforeSeparator, itemsAfterSeparato
   const sumAfter = getPriceSum(itemsAfterSeparator);
 
   const profit = ((sumAfter - sumBefore) * 100) / sumAfter;
-  const tradeStatus = profit < 0 ? 0 : 1;
-  const embedColor = Math.abs(sumBefore - sumAfter) <= equalValueBoundary ? "Blue" : tradeStatus ? "Green" : "Red";
+  profit < 0 ? embedColor = "Red" : (tradeStatus = 1, embedColor = "Green");
+
+  const biggest = sumBefore > sumAfter ? sumBefore : sumAfter; 
+  const smaller = sumBefore < sumAfter ? sumBefore : sumAfter;
+  
+  if(biggest - smaller <= equalValueBoundary)
+    tradeStatus = -1, embedColor = "Blue";
 
   return { sumBefore, sumAfter, profit, embedColor, tradeStatus };
 }
