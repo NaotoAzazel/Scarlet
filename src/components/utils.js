@@ -80,10 +80,10 @@ export function createSelectMenuList({ placeHolder, items, customId }) {
  * @param {string} description 
  * @returns {object} embed
  */
-export function createErrorEmbed(description) {
+export function createErrorEmbed(description, title = "Error") {
   const embed = new EmbedBuilder()
     .setColor("Red")
-    .setTitle("Error")
+    .setTitle(title)
     .setDescription(description)
 
   return embed;

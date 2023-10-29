@@ -3,7 +3,7 @@ import { createErrorEmbed, getDiscordTimestamp } from "../../components/utils.js
 
 const cooldowns = new Map();
 const currentTime = new Date();
-const cooldownTime = 3_600 * 1_000;
+const cooldownTime = 3_600 * 1_000; // 1 час
 
 export default {
   name: "interactionCreate",
@@ -36,7 +36,7 @@ export default {
       const elapsedTime = Date.now() - lastCooldown;
       const futureTime = getDiscordTimestamp(new Date(currentTime.getTime() + cooldownTime), "T"); 
 
-      const errorEmbed = createErrorEmbed(`Вы не можете отправить заявку снова. Будет доступно ${futureTime}`);
+      const errorEmbed = createErrorEmbed(`Вы не можете отправить заявку снова. Будет доступно в ${futureTime}`, "Подожди!");
 
       if (elapsedTime < cooldownTime) {
         await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
